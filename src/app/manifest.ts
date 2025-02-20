@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next"
+import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -11,9 +11,9 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#1f2937",
     icons: [
       {
-        src: "/icon-192x192.png",
+        src: "../../public/icon.jpeg",
         sizes: "192x192",
-        type: "image/png",
+        type: "image/jpeg",
       },
       {
         src: "/icon-512x512.png",
@@ -21,6 +21,5 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/png",
       },
     ],
-  }
+  };
 }
-

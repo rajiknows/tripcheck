@@ -18,8 +18,8 @@ import {
  */
 export const createTable = pgTableCreator((name) => `tripcheck_${name}`);
 
-export const posts = createTable(
-  "post",
+export const userTable = createTable(
+  "user",
   {
     id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
     name: varchar("name", { length: 256 }),
@@ -27,10 +27,74 @@ export const posts = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
+      () => new Date(),
     ),
+    email: varchar("email", { length: 256 }).unique().notNull(),
+  },
+  (example) => ({
+    emailIndex: index("email_idx").on(example.email),
+  }),
+);
+
+export const tripTable = createTable(
+  "trip",
+  {
+    id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+    name: varchar("name", { length: 256 }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date(),
+    ),
+    createrId: integer("creater_id")
+      .notNull()
+      .references(() => userTable.id, {
+        onDelete: "cascade",
+      }),
+    // trip will have more than one users, one creator and multiple participants
+    participants: integer("participants").array().notNull(),
+    // trip will have more than one expenses
+    expenses: integer("expenses").array().notNull(),
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
+
+export const expenseTable = createTable(
+  "expense",
+  {
+    id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+    name: varchar("name", { length: 256 }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    // each expense will have a trip id
+    tripId: integer("trip_id")
+      .notNull()
+      .references(() => tripTable.id, {
+        onDelete: "cascade",
+      }),
+    // each expense will have a userid who has registered the expense
+    userId: integer("user_id")
+      .notNull()
+      .references(() => userTable.id, {
+        onDelete: "cascade",
+      }),
+    // each expense will have a amount
+    amount: integer("amount").notNull(),
+    // each expense will have a description
+    description: varchar("description", { length: 256 }),
+  },
+  (example) => ({
+    nameIndex: index("expense_idx").on(example.name),
+  }),
+);
+
+export const insertUser = typeof userTable.$inferInsert;
+export const insertTrip = typeof tripTable.$inferInsert;
+export const insertExpense = typeof expenseTable.$inferInsert;
+export const selectUser = typeof userTable.$inferSelect;
+export const selectTrip = typeof tripTable.$inferSelect;
+export const selectExpense = typeof expenseTable.$inferSelect;

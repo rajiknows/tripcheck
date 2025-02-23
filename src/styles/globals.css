@@ -7,6 +7,8 @@
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
+    --owecard: 45 100% 50%; /* Dark Yellow */
+    --owedcard: 240 5% 10%; /* Slate Black */
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
@@ -35,6 +37,8 @@
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
+    --owecard: 45 100% 50%; /* Dark Yellow */
+    --owedcard: 240 5% 10%; /* Slate Black */
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
